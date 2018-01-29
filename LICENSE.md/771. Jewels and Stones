@@ -1,0 +1,35 @@
+You're given strings J representing the types of stones that are jewels, and S representing the stones you have.  Each character in S is a type of stone you have.  You want to know how many of the stones you have are also jewels.
+
+The letters in J are guaranteed distinct, and all characters in J and S are letters. Letters are case sensitive, so "a" is considered a different type of stone from "A".
+//方法一：传统的用一个vector当做数组，来当做哈希表，用来计数，但是这个方法其实也略显繁琐了，因为每一个都需要计数 O(m+n)
+class Solution {
+public:
+	int numJewelsInStones(string J, string S) {
+		int Jsize = J.size();
+		int Ssize = S.size();
+		int sum = 0;
+		vector<int> jewels('z'-'A'+1, 0);//注意，这里定数组大小的时候，最好用字母相减的办法，否则容量设置很容易出错
+		for (int i = 0; i < Ssize; ++i) {
+			jewels[S[i] - 'A'] = jewels[S[i] - 'A'] + 1;
+		}
+		for (int i = 0; i < Jsize; ++i)
+			sum = sum + jewels[J[i] - 'A'];
+		return sum;
+	}
+};
+//方法二：用一个集合set来判断，这也是涉及到哈希表的题目中常用的做法 O(m+n)
+class Solution {
+public:
+	int numJewelsInStones(string J, string S) {
+		int Jsize = J.size();
+		int Ssize = S.size();
+		int sum = 0;
+		set<char> jewelset;
+		for (int i = 0; i < Jsize; ++i)
+			jewelset.insert(J[i]);
+		for (int i = 0; i < Ssize; ++i)
+			if (jewelset.count(S[i]) == 1)
+				++sum;
+		return sum;
+	}
+};
