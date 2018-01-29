@@ -1,0 +1,32 @@
++//方法一：使用一个multimap作为哈希表查询位置
+ +//这里需要使用multimap，因为普通的map不允许对一个关键字有不同的健值。而multimap可以
+ +//例如，对于普通map，<5,0>和<5,1>不能共存，但是multimap可以
+ +class Solution {
+ +public:
+ +	vector<int> anagramMappings(vector<int>& A, vector<int>& B) {
+ +		multimap<int, int> mymap;
+ +		int size = A.size();
+ +		for (int i = 0; i < size; ++i)
+ +			mymap.insert(make_pair(B[i], i));//这里注意插入的格式
+ +		for (int i = 0; i < size; ++i) {
+ +			auto target = mymap.find(A[i]);
+ +			A[i] = (*target).second;
+ +			mymap.erase(target);
+ +		}
+ +		return A;
+ +	}
+ +};
+ +//leetcode上的答案似乎是有错误的，因为每次查找都没有把该关键字删除，这样如果有重复的数据，就不对了
+ +class Solution {
+ +    public int[] anagramMappings(int[] A, int[] B) {
+ +        Map<Integer, Integer> D = new HashMap();
+ +        for (int i = 0; i < B.length; ++i)
+ +            D.put(B[i], i);
+ +
+ +        int[] ans = new int[A.length];
+ +        int t = 0;
+ +        for (int x: A)
+ +            ans[t++] = D.get(x);//没有删除
+ +        return ans;
+ +    }
+ +}
