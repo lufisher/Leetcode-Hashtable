@@ -1,0 +1,34 @@
+Given an array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+//这题用哈希表很简单，但是没法完成O(1)的空间复杂度。这里提供两种比较有意思的做法。
+//方法一：使用异或运算。异或运算这个运算方式很特别，很多时候都想不到。如果涉及判断字母或者数字是否相同等场合，都可以考虑是否可以使用
+//两个相同的int异或结果为0，0与任何int异或的结果都是该int本身。这个方法，正负号都可以使用
+//该方法在leetcode上没法通过编译，但是在VS上是可以的，实现了O(1)空间复杂度和O(n)时间复杂度，很高效
+class Solution {
+public:
+	int singleNumber(vector<int>& nums) {
+		int xor = 0;
+		for (int i = 0; i < nums.size(); ++i)
+			xor = xor^nums[i];
+		return xor;
+	}
+};
+//方法二：用数学的方法。对于一个数组，(a+b+c)*2-(2a+2b+c)=c
+//前者需要用一个set容器来获得，后者就是传入的数组的总和，时间和空间复杂度都是O(n)
+class Solution {
+public:
+	int singleNumber(vector<int>& nums) {
+		int sum = 0, setsum = 0;
+		int size = nums.size();
+		set<int> myset;
+		for (int i = 0; i < size; ++i) {
+			sum = sum + nums[i];
+			myset.insert(nums[i]);
+		}
+		for (auto u : myset)
+			setsum = setsum + u;
+		return 2 * setsum - sum;
+	}
+};
